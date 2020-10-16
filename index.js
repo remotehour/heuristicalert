@@ -28,8 +28,19 @@ cron.schedule('0 0 */1 * * *', () => {
       if(!error) {
         const { statuses } = tweets
         statuses.forEach(tweet => {
-          const { created_at, id, user, text } = tweet
-          const { followers_count, favorite_count, name, retweet_count, screen_name } = user
+          const {
+            created_at,
+            id,
+            user,
+            text,
+            user: {
+                followers_count,
+                favorite_count,
+                name,
+                retweet_count,
+                screen_name
+              }
+            } = tweet
     
           // NOTE: created_at should be within 1 hour
           const tweet_time = new Date(created_at).getTime()

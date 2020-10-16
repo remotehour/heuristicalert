@@ -7,4 +7,6 @@ Instant access to twitter mentions relevant to your interest/business
 ```
 $ git clone https://github.com/remotehour/heuristicalert.git
 $ cd heuristicalert
+$ yarn
+$ yarn start
 ```
