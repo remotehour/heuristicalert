@@ -8,11 +8,16 @@ var client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-client.get('search/tweets', {q: 'hello', count: 100000, result_type: "recent", exclude: "retweets"}, function(error, tweets) {
+var current_time = new Date().getTime()
+
+client.get('search/tweets', {q: 'hello', count: 2, result_type: "recent", exclude: "retweets"}, function(error, tweets) {
   if(!error) {
     var { statuses } = tweets
     statuses.forEach(tweet => {
-      console.log(tweet)
+      // NOTE: created_at should be within 1 hour
+      var tweet_time = new Date(tweet.created_at).getTime()
+      var time_diff = (current_time - tweet_time) / 3600000
+      if(time_diff > 1) return
     })
   }
 });
