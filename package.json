@@ -9,6 +9,7 @@
   "author": "remotehour",
   "license": "ISC",
   "dependencies": {
+    "@slack/webhook": "^5.0.3",
     "dotenv": "^8.2.0",
     "twitter": "^1.7.1"
   }
