@@ -10,14 +10,22 @@ var client = new Twitter({
 
 var current_time = new Date().getTime()
 
-client.get('search/tweets', {q: 'hello', count: 2, result_type: "recent", exclude: "retweets"}, function(error, tweets) {
+client.get('search/tweets', {q: 'hello', count: 1000, result_type: "recent", exclude: "retweets"}, function(error, tweets) {
   if(!error) {
     var { statuses } = tweets
     statuses.forEach(tweet => {
+      var { created_at, user } = tweet
+      var { followers_count, retweet_count, favorite_count } = user
+
       // NOTE: created_at should be within 1 hour
-      var tweet_time = new Date(tweet.created_at).getTime()
+      var tweet_time = new Date(created_at).getTime()
       var time_diff = (current_time - tweet_time) / 3600000
       if(time_diff > 1) return
+
+      // NOTE: configure tweets on your customized settings
+      if(followers_count < 100 && retweet_count < 0 && favorite_count < 0) return
+
+      console.log('tweet', tweet)
     })
   }
 });
