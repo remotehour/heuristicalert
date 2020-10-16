@@ -10,7 +10,7 @@ var client = new Twitter({
 
 var current_time = new Date().getTime()
 
-client.get('search/tweets', {q: 'hello', count: 1000, result_type: "recent", exclude: "retweets"}, function(error, tweets) {
+client.get('search/tweets', {q: 'hello', count: 100000, result_type: "recent", exclude: "retweets"}, function(error, tweets) {
   if(!error) {
     var { statuses } = tweets
     statuses.forEach(tweet => {
@@ -23,9 +23,7 @@ client.get('search/tweets', {q: 'hello', count: 1000, result_type: "recent", exc
       if(time_diff > 1) return
 
       // NOTE: configure tweets on your customized settings
-      if(followers_count < 100 && retweet_count < 0 && favorite_count < 0) return
-
-      console.log('tweet', tweet)
+      if(followers_count < 10000 || retweet_count < 0 || favorite_count < 0) return
     })
   }
 });
