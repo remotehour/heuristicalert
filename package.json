@@ -12,6 +12,7 @@
     "@slack/webhook": "^5.0.3",
     "dotenv": "^8.2.0",
     "js-yaml": "^3.14.0",
+    "node-cron": "^2.0.3",
     "twitter": "^1.7.1"
   }
 }
