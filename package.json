@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Instant access to twitter relavent to your business/interest",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "remotehour",
   "license": "ISC",
   "dependencies": {
