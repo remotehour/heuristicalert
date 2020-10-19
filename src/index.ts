@@ -9,6 +9,7 @@ import Bluebird from 'bluebird'
 import Twitter from 'twitter'
 import { IncomingWebhook } from '@slack/webhook'
 
+// @ts-ignore
 const logger = pino({
   timestamp: pino.stdTimeFunctions.isoTime,
   prettyPrint: true,

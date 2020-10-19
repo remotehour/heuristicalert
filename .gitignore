@@ -24,3 +24,4 @@ vendor
 
 *.zip
 heuristicalert.yml
+dist
