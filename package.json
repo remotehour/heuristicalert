@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "remotehour",
   "license": "ISC",
+  "bin": {
+    "heuristicalert": "./bin/heuristicalert.js",
+  },
   "scripts": {
     "dev": "nodemon --ext ts --exec 'yarn build && bin/heuristicalert.js test.yml'",
     "build": "tsc",
