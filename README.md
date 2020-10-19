@@ -5,15 +5,13 @@ Instant access to twitter mentions relevant to your interest/business
 ## Installation
 
 ```
-$ git clone https://github.com/remotehour/heuristicalert.git
-$ cd heuristicalert
-$ yarn install
+npm -g install heuristicalert
 ```
 
 ## Run
 
 ```
-node index.js heuristicalert.yml
+heuristicalert heuristicalert.yml
 ```
 
 `heuristicalert.yml` looks like this:

@@ -1,13 +1,17 @@
 {
   "name": "heuristicalert",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Instant access to twitter relavent to your business/interest",
   "main": "index.js",
   "author": "remotehour",
   "license": "ISC",
+  "bin": {
+    "heuristicalert": "./bin/heuristicalert.js"
+  },
   "scripts": {
     "dev": "nodemon --ext ts --exec 'yarn build && bin/heuristicalert.js test.yml'",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "tsc"
   },
   "dependencies": {
     "@slack/webhook": "^5.0.3",
@@ -28,5 +32,9 @@
     "@types/twitter": "^1.7.0",
     "nodemon": "^2.0.5",
     "typescript": "^4.0.3"
-  }
+  },
+  "files": [
+    "bin/heuristicalert.js",
+    "dist/*"
+  ]
 }
