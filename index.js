@@ -4,6 +4,14 @@ const yaml = require('js-yaml')
 const fs = require('fs')
 const path = require('path')
 const cron = require('node-cron')
+const pino = require('pino')
+const Bluebird = require('bluebird')
+
+const logger = pino({
+  timestamp: pino.stdTimeFunctions.isoTime,
+  prettyPrint: true,
+  level: process.env.LOG_LEVEL || 'debug',
+})
 
 const Twitter = require('twitter')
 const { IncomingWebhook } = require('@slack/webhook')
@@ -21,65 +29,65 @@ const webhook = new IncomingWebhook(url)
 
 const current_time = new Date().getTime()
 
-const keywords = yaml.safeLoad(
-  fs.readFileSync(path.resolve(process.argv[2]), 'utf8'),
-)
+const configPath = path.resolve(process.argv[2])
+logger.info('using config file: %s', configPath)
 
-cron.schedule('0 0 */1 * * *', () => {
-  keywords.forEach((keyword) => {
-    client.get(
-      'search/tweets',
-      {
-        q: keyword.query,
-        count: 100000,
-        result_type: 'recent',
-        exclude: 'retweets',
-      },
-      (error, tweets) => {
-        if (!error) {
-          const { statuses } = tweets
-          statuses.forEach((tweet) => {
-            const {
-              created_at,
-              id,
-              user,
-              text,
-              user: {
-                followers_count,
-                favorite_count,
-                name,
-                retweet_count,
-                screen_name,
-              },
-            } = tweet
+const configYaml = fs.readFileSync(configPath, 'utf8')
+const keywords = yaml.safeLoad(configYaml)
+logger.info('configuration: \n%s', configYaml)
 
-            // NOTE: created_at should be within 1 hour
-            const tweet_time = new Date(created_at).getTime()
-            const time_diff = (current_time - tweet_time) / 3600000
-            if (time_diff > 1) return
+async function main() {
+  await Bluebird.map(keywords, async (keyword) => {
+    const tweets = await client.get('search/tweets', {
+      q: keyword.query,
+      count: 100000,
+      result_type: 'recent',
+      exclude: 'retweets',
+    })
+    await Bluebird.map(tweets.statuses, async (tweet) => {
+      const { created_at, id_str, text, user } = tweet
 
-            // NOTE: configure tweets on your customized settings
-            if (
-              followers_count < keyword.followers_count ||
-              favorite_count < keyword.favorite_count ||
-              retweet_count < keyword.retweet_count
-            )
-              return
+      const link = `${twitter_url}/${user.screen_name}/status/${id_str}`
 
-            const attachments = {
-              attachments: [
-                {
-                  author_name: user.name,
-                  author_link: `${twitter_url}/${user.slug}`,
-                  text: `${name} tweeted a tweet about 'hello'\n${text}\nURL: ${twitter_url}/${screen_name}/status/${id}`,
-                  color: '#00acee',
-                },
-              ],
-            }
-            webhook.send(attachments)
-          })
-        }
-      },
-    )
+      // NOTE: configure tweets on your customized settings
+      if (
+        user.followers_count < keyword.followers_count ||
+        user.favorite_count < keyword.favorite_count ||
+        user.retweet_count < keyword.retweet_count
+      ) {
+        logger.info('Tweet does not meet conditions. skip', link)
+        return
+      }
+
+      // NOTE: created_at should be within 1 hour
+      const tweet_time = new Date(created_at).getTime()
+      const time_diff = (current_time - tweet_time) / 3600000
+      if (time_diff > 1) {
+        logger.info('The tweet is not tweeted within one hour. skip', link)
+        return
+      }
+
+      logger.info('posting slack: %s', link)
+
+      // await webhook.send({
+      //   channel: 'notifications-test',
+      //   attachments: [
+      //     {
+      //       author_name: user.name,
+      //       author_link: `${twitter_url}/${user.slug}`,
+      //       text: `${name} tweeted a tweet about 'hello'\n${text}\nURL: ${link}`,
+      //       color: '#00acee',
+      //     },
+      //   ],
+      // })
+
+      logger.info('successfully sent to slack: %s', link)
+    })
   })
-})
+}
+
+cron.schedule('0 * * * *', main)
+
+main()
+
+logger.info('Successfully scheduled Heuristic Alert for every one hour')
