@@ -1,4 +1,5 @@
 require('dotenv').config()
+import got from 'got'
 
 import yaml from 'js-yaml'
 import fs from 'fs'
@@ -44,28 +45,44 @@ function createSlackWebhook() {
   return new IncomingWebhook(url)
 }
 
+async function getConfig() {
+  const maybeConfigPath = process.argv[2]
+
+  if (maybeConfigPath) {
+    logger.info('Using config file: %s', maybeConfigPath)
+    if (maybeConfigPath.startsWith('http')) {
+      const res = await got(maybeConfigPath)
+      return res.body
+    }
+    if (maybeConfigPath.startsWith('/')) {
+      return fs.readFileSync(maybeConfigPath, 'utf8')
+    }
+    return fs.readFileSync(path.resolve(maybeConfigPath), 'utf8')
+  }
+  const assumingFilePath = path.resolve(process.cwd(), 'heuristicalert.yml')
+  logger.info('Using config file: %s', assumingFilePath)
+  return fs.readFileSync(assumingFilePath, 'utf8')
+}
+
 async function main() {
   const current_time = new Date().getTime()
 
-  const configPath = path.resolve(process.argv[2])
-  logger.info('using config file: %s', configPath)
-
-  const configYaml = fs.readFileSync(configPath, 'utf8')
-  const keywords = yaml.safeLoad(configYaml)
-  logger.info('configuration: \n%s', configYaml)
+  const keywords = yaml.safeLoad(await getConfig())
+  logger.info('Configuration: \n%j', keywords)
 
   if (!Array.isArray(keywords)) {
     throw 'Wrong configuration.'
   }
+
   const client = createTwitterClient()
-  await Bluebird.map(keywords, async (keyword) => {
+  await Bluebird.each(keywords, async (keyword) => {
     const tweets = await client.get('search/tweets', {
       q: keyword.query,
       count: 100000,
       result_type: 'recent',
       exclude: 'retweets',
     })
-    await Bluebird.map(tweets.statuses, async (tweet: any) => {
+    await Bluebird.each(tweets.statuses, async (tweet: any) => {
       const { created_at, id_str, text, user } = tweet
 
       const link = `${twitter_url}/${user.screen_name}/status/${id_str}`
@@ -88,7 +105,7 @@ async function main() {
         return
       }
 
-      logger.info('posting slack: %s', link)
+      logger.info('Posting to slack: %s', link)
 
       await createSlackWebhook().send({
         channel: 'notifications-test',
@@ -96,15 +113,17 @@ async function main() {
           {
             author_name: user.name,
             author_link: `${twitter_url}/${user.slug}`,
-            text: `${name} tweeted a tweet about 'hello'\n${text}\nURL: ${link}`,
+            text: `${user.name} tweeted a tweet about 'hello'\n${text}\nURL: ${link}`,
             color: '#00acee',
           },
         ],
       })
 
-      logger.info('successfully sent to slack: %s', link)
+      logger.info('Successfully sent to slack: %s', link)
     })
   })
+
+  logger.info('Done main cralwling. Waiting for the next run.')
 }
 
 export function run() {
@@ -114,4 +133,9 @@ export function run() {
   logger.info('Now running initial crawling')
 
   main()
+
+  process.on('SIGTERM', () => {
+    logger.info('Terminating Heuristic Alert')
+    process.exit(0)
+  })
 }
