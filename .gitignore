@@ -23,3 +23,5 @@ firebase-debug.log
 vendor
 
 *.zip
+heuristicalert.yml
+dist
