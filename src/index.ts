@@ -112,8 +112,8 @@ async function main() {
         attachments: [
           {
             author_name: user.name,
-            author_link: `${twitter_url}/${user.slug}`,
-            text: `${user.name} tweeted a tweet about "${keyword}"\n${text}\nURL: ${link}`,
+            author_link: `${twitter_url}/${user.screen_name}`,
+            text: `${user.name} tweeted a tweet about "${keyword}"\n${text}\n**URL: ${link}**`,
             color: '#00acee',
           },
         ],
