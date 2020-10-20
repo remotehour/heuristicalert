@@ -113,7 +113,7 @@ async function main() {
           {
             author_name: user.name,
             author_link: `${twitter_url}/${user.slug}`,
-            text: `${user.name} tweeted a tweet about 'hello'\n${text}\nURL: ${link}`,
+            text: `${user.name} tweeted a tweet about "${keyword}"\n${text}\nURL: ${link}`,
             color: '#00acee',
           },
         ],
