@@ -11,7 +11,12 @@ npm -g install heuristicalert
 ## Run
 
 ```
-heuristicalert heuristicalert.yml
+env TWITTER_CONSUMER_KEY=xxx \
+    TWITTER_CONSUMER_SECRET=xxx \
+    TWITTER_ACCESS_TOKEN_KEY=xxx \
+    TWITTER_ACCESS_TOKEN_SECRET=xxx \
+    SLACK_WEBHOOK_URL=https://hooks.slack.com/services/xxx \
+    heuristicalert heuristicalert.yml
 ```
 
 `heuristicalert.yml` looks like this:

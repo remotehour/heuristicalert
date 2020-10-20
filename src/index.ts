@@ -108,7 +108,7 @@ async function main() {
       logger.info('Posting to slack: %s', link)
 
       await createSlackWebhook().send({
-        channel: 'notifications-test',
+        channel: process.env.SLACK_CHANNEL,
         attachments: [
           {
             author_name: user.name,
