@@ -39,6 +39,8 @@ env TWITTER_CONSUMER_KEY=xxx \
 
 # TODO
 
-- [ ] Add "oneshot" run 
+- [ ] Add "oneshot" run to work with other scheduling service
+- [ ] Usable in Module (to support AWS lambda environment)
 - [ ] Customize cron scheduling
-- [ ] Docker integration
+- [ ] Provide official docker image
+- [ ] Write tests for easier maintainability
