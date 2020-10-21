@@ -10,6 +10,13 @@ import Bluebird from 'bluebird'
 import Twitter from 'twitter'
 import { IncomingWebhook } from '@slack/webhook'
 
+interface Config {
+  query: string
+  followers_count: number
+  favorite_count: number
+  retweet_count: number
+}
+
 // @ts-ignore
 const logger = pino({
   timestamp: pino.stdTimeFunctions.isoTime,
@@ -75,7 +82,7 @@ async function main() {
   }
 
   const client = createTwitterClient()
-  await Bluebird.each(keywords, async (keyword) => {
+  await Bluebird.each(keywords as Config[], async (keyword) => {
     const tweets = await client.get('search/tweets', {
       q: keyword.query,
       count: 100000,
@@ -113,7 +120,7 @@ async function main() {
           {
             author_name: user.name,
             author_link: `${twitter_url}/${user.screen_name}`,
-            text: `${user.name} tweeted a tweet about "${keyword}"\n${text}\n**URL: ${link}**`,
+            text: `${user.name} tweeted a tweet about "${keyword.query}"\n${text}\n**URL: ${link}**`,
             color: '#00acee',
           },
         ],
