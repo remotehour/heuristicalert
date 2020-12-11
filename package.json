@@ -4,7 +4,7 @@
   "description": "Instant access to twitter relavent to your business/interest",
   "main": "index.js",
   "author": "remotehour",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "heuristicalert": "./bin/heuristicalert.js"
   },
