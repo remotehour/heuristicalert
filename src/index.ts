@@ -11,6 +11,7 @@ import Twitter from 'twitter'
 import { IncomingWebhook } from '@slack/webhook'
 
 interface Config {
+  lang: string
   query: string
   followers_count: number
   favorite_count: number
@@ -85,6 +86,7 @@ async function main() {
   await Bluebird.each(keywords as Config[], async (keyword) => {
     const tweets = await client.get('search/tweets', {
       q: keyword.query,
+      lang: keyword.lang,
       count: 100000,
       result_type: 'recent',
       exclude: 'retweets',
