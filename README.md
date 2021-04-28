@@ -1,3 +1,6 @@
+[![test](https://github.com/remotehour/heuristicalert/actions/workflows/test.yml/badge.svg)](https://github.com/remotehour/heuristicalert/actions/workflows/test.yml)
+[![release](https://github.com/remotehour/heuristicalert/actions/workflows/release.yml/badge.svg)](https://github.com/remotehour/heuristicalert/actions/workflows/release.yml)
+
 # Heuristicalert
 
 Instant access to twitter mentions relevant to your interest/business.
