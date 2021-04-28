@@ -75,7 +75,7 @@ async function getConfig() {
 async function main() {
   const current_time = new Date().getTime()
 
-  const keywords = yaml.safeLoad(await getConfig())
+  const keywords = yaml.load(await getConfig())
   logger.info('Configuration: \n%j', keywords)
 
   if (!Array.isArray(keywords)) {
