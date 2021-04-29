@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "13:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/pino"
+    versions:
+    - 6.3.6
+    - 6.3.7
+  - dependency-name: "@types/js-yaml"
+    versions:
+    - 4.0.0
