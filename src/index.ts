@@ -132,7 +132,7 @@ async function main() {
     })
   })
 
-  logger.info('Done main cralwling. Waiting for the next run.')
+  logger.info('Done main crawling. Waiting for the next run.')
 }
 
 export function run() {
