@@ -1,6 +1,6 @@
 {
   "name": "heuristicalert",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Instant access to twitter relavent to your business/interest",
   "main": "index.js",
   "author": "remotehour",
