@@ -30,14 +30,16 @@ env TWITTER_CONSUMER_KEY=xxx \
 # Tweet including "Hello" and author's followers > 1000, favorite > 10, retweet > 10
 - query: Hello
   lang: en
-  followers_count: 1000
+  max_followers_count: 10000
+  min_followers_count: 1000
   favorite_count: 10
   retweet_count: 10
 
 # Every tweet including "Remotehour"
 - query: Remotehour
   lang: en
-  followers_count: 0
+  max_followers_count: 10000
+  min_followers_count: 1000
   favorite_count: 0
   retweet_count: 0
 ```
