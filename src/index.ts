@@ -13,8 +13,13 @@ import { IncomingWebhook } from '@slack/webhook'
 interface Config {
   lang: string
   query: string
+<<<<<<< HEAD
   maximum_followers_count: number
   minimum_followers_count: number
+=======
+  max_followers_count: number
+  min_followers_count: number
+>>>>>>> de32e39439c2f7d93b5b8539f1fe0db2063a3ebe
   favorite_count: number
   retweet_count: number
 }
@@ -99,8 +104,13 @@ async function main() {
 
       // NOTE: configure tweets on your customized settings
       if (
+<<<<<<< HEAD
         user.followers_count < keyword.minimum_followers_count ||
         user.followers_count > keyword.maximum_followers_count ||
+=======
+        user.followers_count < keyword.min_followers_count ||
+        keyword.max_followers_count < user.followers_count ||
+>>>>>>> de32e39439c2f7d93b5b8539f1fe0db2063a3ebe
         user.favorite_count < keyword.favorite_count ||
         user.retweet_count < keyword.retweet_count
       ) {
