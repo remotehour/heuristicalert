@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/bluebird": "^3.5.32",
     "@types/js-yaml": "^4.0.1",
-    "@types/node-cron": "^2.0.3",
+    "@types/node-cron": "^3.0.1",
     "@types/pino": "^6.3.2",
     "@types/twitter": "^1.7.0",
     "nodemon": "^2.0.5",
