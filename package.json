@@ -16,7 +16,7 @@
   "dependencies": {
     "@slack/webhook": "^6.0.0",
     "bluebird": "^3.7.2",
-    "dotenv": "^9.0.1",
+    "dotenv": "^16.0.1",
     "got": "^11.7.0",
     "js-yaml": "^4.0.0",
     "node-cron": "^3.0.0",
